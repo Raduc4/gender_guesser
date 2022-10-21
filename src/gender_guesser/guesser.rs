@@ -1,13 +1,13 @@
 use std::{
     collections::HashMap,
     fs::File,
-    io::{self, BufRead, BufReader},
+    io::{BufRead, BufReader},
 };
 
 type Names = HashMap<String, String>;
 
 #[derive(Debug)]
-enum Gender {
+pub enum Gender {
     Male,
     Famale,
     NotSure,
@@ -16,59 +16,44 @@ enum Gender {
     NotFound,
 }
 pub struct Detector {
-    case_sensitive: bool,
     names: Names,
 }
 
 impl Detector {
-    pub fn new(case_sensitive: bool) -> Self {
+    pub fn new() -> Self {
         Self {
-            case_sensitive,
             names: HashMap::default(),
         }
     }
-    fn parse(self, name_to_find: &str) -> Gender {
+    pub fn parse(&mut self, name_to_find: &str) -> () {
         let file = File::open("src/gender_guesser/data/nam_dict.txt").unwrap();
-        let lines = io::BufReader::new(file).lines();
+        let lines = BufReader::new(file).lines();
 
-        let mut it: Vec<&str> = vec![];
-        let mut gder: Gender;
         for line in lines {
-            let line = line.unwrap().clone();
-            let it = line.split(" ").collect::<Vec<&str>>();
-            if it[1] == name_to_find {
-                if it[0] == "M" {
-                    gder = Gender::Male;
-                } else if it[0] == "F" {
-                    gder = Gender::Famale
-                } else {
-                    continue;
-                }
-            }
+            let item = line.unwrap();
+            Self::eat_the_line(self, &item);
         }
-        gder
     }
-    // fn find_name<'a>(lines: BufReader<File>, name_to_find: &str) -> Option<(&'a str, &'a str)> {
-    //     let somet = lines.lines().for_each(|item| {
-    //         let x = match item.unwrap().split(" ").collect::<Vec<&str>>() {
-    //             sex if sex[1] == name_to_find => Some((sex[0], sex[1])),
-    //             _ => None,
-    //         };
-    //         x
-    //     });
-    // if !line.starts_with("#") {
-    // Some(("mama", "Mama"))
-    //     let x = line.split(" ").collect::<Vec<&str>>();
-    //     match x {
-    //         name if name[1] == neme_to_find => Some((name[0], name[1])),
-    //         _ => None,
-    //     }
-    // } else {
-    //     None
-    // }
 
-    fn get_gender(self, name: &str) -> Gender {
-        Self::parse(self, name)
+    pub fn eat_the_line<'a>(&mut self, line: &str) -> () {
+        if !line.starts_with("#") {
+            let item = line.split(" ").collect::<Vec<&str>>();
+            Self::set(self, item);
+        };
+    }
+
+    pub fn set(&mut self, item_vec: Vec<&str>) -> () {
+        self.names
+            .insert(item_vec[1].to_string(), item_vec[0].to_owned());
+    }
+    pub fn get_gender(&mut self, name: &str) -> Gender {
+        Self::parse(self, name);
+
+        if self.names.contains_key(name) {
+            Gender::Male
+        } else {
+            Gender::NotFound
+        }
     }
 }
 
@@ -77,7 +62,8 @@ mod tests_gender_guesser {
     use super::*;
     #[test]
     fn prints_the_line() {
-        let d = Detector::new(false);
-        println!("{:?}", d.parse("Cristian"));
+        let mut d = Detector::new();
+        println!("{:?}", d.get_gender("Enna"));
+        println!("{:?}", d.names.capacity());
     }
 }
