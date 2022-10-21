@@ -1,3 +1,7 @@
+//! # Guessing Gender
+//!
+//! `get_gender` - main method
+
 use std::{
     collections::HashMap,
     fs::File,
@@ -6,6 +10,7 @@ use std::{
 
 type Names = HashMap<String, String>;
 
+/// # Possible results
 #[derive(Debug, PartialEq, Eq)]
 pub enum Gender {
     Male,
@@ -16,6 +21,16 @@ pub enum Gender {
     NotSure,
     NotFound,
 }
+
+/// Implementation struct for guessing the gender
+///
+/// # Examples
+///```
+/// use gender_guesser::Detector;
+///
+/// let mut d = Detector::new();
+/// d.get_gender("name");
+///```
 pub struct Detector {
     names: Names,
 }
@@ -26,7 +41,7 @@ impl Detector {
             names: HashMap::default(),
         }
     }
-    pub fn parse(&mut self, name_to_find: &str) -> () {
+    fn parse(&mut self, name_to_find: &str) -> () {
         let file = File::open("src/nam_dict.txt").unwrap();
         let lines = BufReader::new(file).lines();
 
@@ -36,14 +51,14 @@ impl Detector {
         }
     }
 
-    pub fn eat_the_line<'a>(&mut self, line: &str) -> () {
+    fn eat_the_line<'a>(&mut self, line: &str) -> () {
         if !line.starts_with("#") {
             let item = line.split_whitespace().collect::<Vec<&str>>();
             Self::set(self, item);
         };
     }
 
-    pub fn set(&mut self, item_vec: Vec<&str>) -> () {
+    fn set(&mut self, item_vec: Vec<&str>) -> () {
         self.names
             .insert(item_vec[1].to_string(), item_vec[0].to_owned());
     }
