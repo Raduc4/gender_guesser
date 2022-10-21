@@ -29,22 +29,24 @@ impl Detector {
     }
     fn parse(self, name_to_find: &str) -> Gender {
         let file = File::open("src/gender_guesser/data/nam_dict.txt").unwrap();
-        let lines = io::BufReader::new(file);
+        let lines = io::BufReader::new(file).lines();
 
-        // lines.lines().into_iter().for_each(|item| {
-        //     let line = item.unwrap();
-
-        //     match Self::find_name(&line, name_to_find) {
-        //         Some(x) => x,
-        //         _ => {}
-        //     }
-        // });
-        lines.lines().into_iter().filter(|item| {
-            let line: Vec<&str> = item.unwrap().split(" ").collect();
-            line[1] == name_to_find
-        });
-        // println!("{x:?}");
-        Gender::Famale
+        let mut it: Vec<&str> = vec![];
+        let mut gder: Gender;
+        for line in lines {
+            let line = line.unwrap().clone();
+            let it = line.split(" ").collect::<Vec<&str>>();
+            if it[1] == name_to_find {
+                if it[0] == "M" {
+                    gder = Gender::Male;
+                } else if it[0] == "F" {
+                    gder = Gender::Famale
+                } else {
+                    continue;
+                }
+            }
+        }
+        gder
     }
     // fn find_name<'a>(lines: BufReader<File>, name_to_find: &str) -> Option<(&'a str, &'a str)> {
     //     let somet = lines.lines().for_each(|item| {
