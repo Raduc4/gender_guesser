@@ -1,6 +1,6 @@
 //! # Guessing Gender
 //!
-//! `get_gender` - main method
+//! `get_gender()` - use this to get the gender  
 
 use std::{
     collections::HashMap,
@@ -36,40 +36,19 @@ pub enum Gender {
 pub struct Detector {
     names: Names,
 }
+include!(concat!(env!("OUT_DIR"), "/load_names.rs"));
 
 impl Detector {
     pub fn new() -> Self {
-        Self {
-            names: HashMap::default(),
+        let names = &NAMES;
+        let mut hmap: HashMap<String, String> = HashMap::new();
+        for (u1, u2) in names.iter() {
+            hmap.insert(u1.to_owned(), u2.to_owned());
         }
-    }
-    fn parse(&mut self, name_to_find: &str) -> () {
-        let p = env::current_dir().unwrap();
-        println!("{}", std::env::var("OUT_DIR").unwrap());
-        println!("{}", p.display());
-        let file = File::open(format!("{}/src/nam_dict.txt", p.display())).unwrap();
-        let lines = BufReader::new(file).lines();
-
-        for line in lines {
-            let item = line.unwrap();
-            Self::eat_the_line(self, &item);
-        }
+        Self { names: hmap }
     }
 
-    fn eat_the_line<'a>(&mut self, line: &str) -> () {
-        if !line.starts_with("#") {
-            let item = line.split_whitespace().collect::<Vec<&str>>();
-            Self::set(self, item);
-        };
-    }
-
-    fn set(&mut self, item_vec: Vec<&str>) -> () {
-        self.names
-            .insert(item_vec[1].to_string(), item_vec[0].to_owned());
-    }
     pub fn get_gender(&mut self, name: &str) -> Gender {
-        Self::parse(self, name);
-
         if self.names.contains_key(name) {
             let letter = self.names.get(name).unwrap();
 
