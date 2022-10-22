@@ -1,6 +1,6 @@
 [package]
 name = "gender_guesser"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Radu"]
 description = "A library that guesses the gender of a given name."

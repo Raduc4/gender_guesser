@@ -4,8 +4,11 @@
 
 use std::{
     collections::HashMap,
+    env,
     fs::File,
+    include,
     io::{BufRead, BufReader},
+    path::Path,
 };
 
 type Names = HashMap<String, String>;
@@ -42,7 +45,8 @@ impl Detector {
         }
     }
     fn parse(&mut self, name_to_find: &str) -> () {
-        let file = File::open("src/nam_dict.txt").unwrap();
+        let p = env::current_dir().unwrap();
+        let file = File::open(format!("{}/src/nam_dict.txt", p.display())).unwrap();
         let lines = BufReader::new(file).lines();
 
         for line in lines {
