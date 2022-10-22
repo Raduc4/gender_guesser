@@ -2,6 +2,10 @@
 
 #### _Guesses the gender of a given name_
 
+_Still under development. Download the naming file and put it into the src/. Then you are ready to go_
+
+[ Naminges File](https://raw.githubusercontent.com/Raduc4/gender_guesser/master/src/nam_dict.txt)
+
 ---
 
 # Example

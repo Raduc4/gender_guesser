@@ -24,7 +24,6 @@ pub enum Gender {
     NotSure,
     NotFound,
 }
-
 /// Implementation struct for guessing the gender
 ///
 /// # Examples
@@ -46,6 +45,8 @@ impl Detector {
     }
     fn parse(&mut self, name_to_find: &str) -> () {
         let p = env::current_dir().unwrap();
+        println!("{}", std::env::var("OUT_DIR").unwrap());
+        println!("{}", p.display());
         let file = File::open(format!("{}/src/nam_dict.txt", p.display())).unwrap();
         let lines = BufReader::new(file).lines();
 
