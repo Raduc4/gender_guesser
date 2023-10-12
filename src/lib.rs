@@ -30,6 +30,7 @@ pub enum Gender {
 /// let d = Detector::new();
 /// d.get_gender("name");
 ///```
+#[derive(Debug, Clone, Copy)]
 pub struct Detector {
     names: &'static Names,
 }
