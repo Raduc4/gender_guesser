@@ -48,11 +48,12 @@ impl Detector {
     pub fn get_gender(&self, name: &str) -> Gender {
         self.names()
             .get(name.to_lowercase().as_str())
-            .map(|letter| match letter {
-                letter if letter == "m" => Gender::Male,
-                letter if letter == "f" => Gender::Female,
-                letter if letter == "?m" => Gender::MayBeMale,
-                letter if letter == "?f" => Gender::MayBeFemale,
+            .map(|letter| match letter.as_str() {
+                "m" => Gender::Male,
+                "f" => Gender::Female,
+                "?m" => Gender::MayBeMale,
+                "?f" => Gender::MayBeFemale,
+                "=" => Gender::BothMaleFemale,
                 _ => Gender::NotSure,
             })
             .unwrap_or(Gender::NotFound)
