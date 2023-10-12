@@ -1,6 +1,6 @@
 [package]
 name = "gender_guesser"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 authors = ["Radu"]
 description = "A library that guesses the gender of a given name."
@@ -8,8 +8,6 @@ license = "MIT"
 repository = "https://github.com/Raduc4/gender_guesser"
 readme = "README.md"
 keywords = ["gender", "gender_guesser", "find-gender", "gender_define", "name_gender"]
-build = "build.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-once_cell = "1.15.0"
