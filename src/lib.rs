@@ -4,7 +4,7 @@
 
 mod load_names;
 
-use std::collections::HashMap;
+use std::{collections::HashMap, marker::PhantomData};
 
 use load_names::get_names;
 
@@ -31,9 +31,7 @@ pub enum Gender {
 /// d.get_gender("name");
 ///```
 #[derive(Debug, Clone, Copy)]
-pub struct Detector {
-    names: &'static Names,
-}
+pub struct Detector(PhantomData<Names>);
 
 impl Default for Detector {
     fn default() -> Self {
@@ -41,12 +39,14 @@ impl Default for Detector {
     }
 }
 impl Detector {
-    pub fn new() -> Self {
-        Self { names: get_names() }
+    pub const fn new() -> Self {
+        Self(PhantomData)
     }
-
+    fn names(&self) -> &'static Names {
+        get_names()
+    }
     pub fn get_gender(&self, name: &str) -> Gender {
-        self.names
+        self.names()
             .get(name)
             .map(|letter| match letter {
                 letter if letter == "M" => Gender::Male,
