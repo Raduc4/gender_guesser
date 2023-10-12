@@ -18,7 +18,7 @@ pub(crate) fn get_names() -> &'static HashMap<String, String> {
                 let mut items = line.split_whitespace();
                 let item0 = items.next()?;
                 let item1 = items.next()?;
-                Some((item1.to_string(), item0.to_string()))
+                Some((item1.to_lowercase(), item0.to_lowercase()))
             })
             .collect()
     })
