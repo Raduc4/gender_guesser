@@ -1,14 +1,14 @@
 use std::{
     collections::HashMap,
-    io::{BufRead, BufReader},
+    io::BufRead,
     sync::OnceLock,
 };
 
-const FILE: &str = include_str!("nam_dict.txt");
+const FILE: &[u8; 4493536] = include_bytes!("nam_dict.txt");
 pub(crate) static NAMES: OnceLock<HashMap<String, String>> = OnceLock::new();
 pub(crate) fn get_names() -> &'static HashMap<String, String> {
     NAMES.get_or_init(|| {
-        BufReader::new(FILE.as_bytes())
+        FILE
             .lines()
             .flatten()
             .flat_map(|line| {
